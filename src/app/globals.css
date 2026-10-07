@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sumi: #0b0807;
+  --color-sumi-2: #140e0c;
+  --color-akane: #4a0b10;
+  --color-akane-deep: #2c0609;
+  --color-shu: #9a2320;
+  --color-washi: #efe7da;
+  --color-kinu: #c9bca7;
+  --color-kin: #b08850;
+
+  --font-serif: "Cormorant Garamond", "Times New Roman", serif;
+  --font-mincho: "Shippori Mincho", serif;
+  --font-sans: "Manrope", system-ui, sans-serif;
+
+  --ease-cine: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background: var(--color-sumi);
+  color: var(--color-washi);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+body {
+  background: var(--color-sumi);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-shu);
+  color: var(--color-washi);
+}
+
+@layer components {
+/* ---------- Tipografia ---------- */
+.display {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+}
+.display em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--color-kinu);
+}
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+.kanji {
+  font-family: var(--font-mincho);
+  font-weight: 400;
+}
+
+/* Linhas que sobem por trás de uma máscara */
+.line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.line > span {
+  display: block;
+  will-change: transform;
+}
+
+/* ---------- Mídia ---------- */
+.frame {
+  position: relative;
+  overflow: hidden;
+}
+.frame img {
+  object-fit: cover;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Links e CTAs ---------- */
+.link-line {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9em;
+}
+.link-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.55em;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.35;
+  transform-origin: right;
+  transition: transform 0.7s var(--ease-cine), opacity 0.4s;
+}
+.link-line:hover::after {
+  animation: wipe 0.9s var(--ease-cine);
+  opacity: 0.9;
+}
+.link-line .arrow {
+  transition: transform 0.6s var(--ease-soft);
+}
+.link-line:hover .arrow {
+  transform: translateX(0.35em);
+}
+/* Botão com preenchimento que sobe */
+.btn-fill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid color-mix(in srgb, var(--color-washi) 40%, transparent);
+  transition: color 0.6s var(--ease-cine), border-color 0.6s;
+}
+.btn-fill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-washi);
+  transform: translateY(101%);
+  transition: transform 0.6s var(--ease-cine);
+}
+.btn-fill:hover {
+  color: var(--color-sumi);
+  border-color: var(--color-washi);
+}
+.btn-fill:hover::before {
+  transform: translateY(0);
+}
+
+}
+
+@keyframes wipe {
+  0% { transform: scaleX(1); transform-origin: right; }
+  45% { transform: scaleX(0); transform-origin: right; }
+  46% { transform: scaleX(0); transform-origin: left; }
+  100% { transform: scaleX(1); transform-origin: left; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+@keyframes jpIn {
+  from { transform: translateY(40%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
